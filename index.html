@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>マナブ 手順書・教育記録(無料版)</title>
+<style>
+:root{
+  --navy:#16283C; --ink:#101820; --paper:#FFFFFF; --bg:#EEF1F4;
+  --blue:#0F62A8; --green:#1E7F4C; --orange:#C96A12; --red:#B3261E; --yellow:#F5B301;
+  --purple:#5B3E96; --line:#CDD5DD; --sub:#5A6673;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{font-size:100%;}
+html.scale-l{font-size:112.5%;}
+html.scale-xl{font-size:125%;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
+  font-size:1.125rem; line-height:1.65;
+}
+header{
+  background:var(--navy); color:#fff; padding:.7rem 1rem;
+  display:flex; align-items:center; gap:.6rem; position:sticky; top:0; z-index:20;
+}
+header .back{
+  background:rgba(255,255,255,.14); border:none; color:#fff; border-radius:10px;
+  min-width:56px; min-height:44px; font-size:1.05rem; font-weight:700; cursor:pointer;
+}
+header h1{font-size:1.15rem; margin:0; font-weight:700; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.hazard{height:6px; background:repeating-linear-gradient(45deg,var(--yellow) 0 12px,var(--navy) 12px 24px);}
+main{max-width:720px; margin:0 auto; padding:1rem 1rem 6rem;}
+.screen{display:none;}
+.screen.active{display:block;}
+.btn{
+  display:flex; align-items:center; justify-content:center; gap:.5rem;
+  width:100%; min-height:56px; border:none; border-radius:14px;
+  font-size:1.15rem; font-weight:700; cursor:pointer; padding:.6rem 1rem;
+  color:#fff; background:var(--blue); box-shadow:0 2px 0 rgba(0,0,0,.18);
+}
+.btn:active{transform:translateY(1px); box-shadow:none;}
+.btn.green{background:var(--green);}
+.btn.orange{background:var(--orange);}
+.btn.red{background:var(--red);}
+.btn.purple{background:var(--purple);}
+.btn.gray{background:#fff; color:var(--ink); border:2px solid var(--line);}
+.btn.small{min-height:48px; font-size:1rem; width:auto; padding:.4rem 1rem;}
+.btn:disabled{opacity:.45; cursor:not-allowed;}
+.card{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:1rem; margin-bottom:.9rem;}
+.card h3{margin:.1rem 0 .5rem; font-size:1.05rem; color:var(--navy);}
+label.f{display:block; font-weight:700; margin:.9rem 0 .3rem; color:var(--navy);}
+label.f .req{color:var(--red); font-size:.85rem; margin-left:.3rem;}
+label.f .opt{color:var(--sub); font-size:.85rem; margin-left:.3rem;}
+input[type=text], input[type=date], select, textarea{
+  width:100%; font-size:1.1rem; padding:.7rem .8rem; border:2px solid var(--line);
+  border-radius:12px; background:#fff; color:var(--ink); font-family:inherit;
+}
+textarea{min-height:5rem; line-height:1.6;}
+input:focus, select:focus, textarea:focus, .btn:focus-visible{ outline:3px solid var(--yellow); outline-offset:1px; }
+.hint{color:var(--sub); font-size:.9rem; margin:.25rem 0 0;}
+.badge{display:inline-block; border-radius:8px; padding:.1rem .55rem; font-size:.85rem; font-weight:700; color:#fff;}
+.badge.b-active{background:var(--blue);} .badge.b-draft{background:#7A8794;}
+.badge.b-old{background:#333;} .badge.b-cat{background:var(--navy);}
+.empty{text-align:center; color:var(--sub); padding:2.2rem 1rem; background:#fff; border:2px dashed var(--line); border-radius:16px;}
+.toast{
+  position:fixed; left:50%; bottom:90px; transform:translateX(-50%);
+  background:var(--navy); color:#fff; padding:.7rem 1.2rem; border-radius:12px;
+  font-weight:700; z-index:99; box-shadow:0 4px 14px rgba(0,0,0,.3);
+  opacity:0; transition:opacity .25s; pointer-events:none; max-width:90%;
+}
+.toast.show{opacity:1;}
+.home-grid{display:grid; grid-template-columns:1fr; gap:.9rem; margin-top:.5rem;}
+.home-btn{
+  display:flex; align-items:center; gap:1rem; background:#fff;
+  border:2px solid var(--line); border-radius:18px; padding:1.1rem 1.2rem;
+  font-size:1.3rem; font-weight:700; color:var(--ink); cursor:pointer; width:100%;
+  min-height:84px; text-align:left;
+}
+.home-btn .ic{width:56px; height:56px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.7rem; color:#fff; flex-shrink:0;}
+.home-btn .sub{display:block; font-size:.9rem; font-weight:400; color:var(--sub);}
+.home-btn:active{background:#F4F8FC;}
+.m-item{background:#fff; border:1px solid var(--line); border-radius:16px; padding:.9rem 1rem; margin-bottom:.7rem; cursor:pointer;}
+.m-item .t{font-weight:700; font-size:1.1rem; margin:.15rem 0;}
+.m-item .meta{color:var(--sub); font-size:.9rem;}
+.searchbar{display:flex; gap:.5rem; margin-bottom:.8rem;}
+.searchbar input{flex:1;}
+.filters{display:flex; gap:.5rem; margin-bottom:.9rem;}
+.filters select{flex:1; font-size:1rem; padding:.5rem;}
+.sec-title{display:flex; align-items:center; gap:.5rem; margin:1.3rem 0 .5rem; font-size:1.05rem; font-weight:700; color:var(--navy); border-left:6px solid var(--yellow); padding-left:.55rem;}
+ul.plain{margin:.3rem 0; padding-left:1.3rem;}
+ul.plain li{margin-bottom:.35rem;}
+/* ---- ブロック(手順書ビルダー) ---- */
+.block{background:#fff; border:1px solid var(--line); border-radius:16px; padding:.9rem; margin-bottom:.7rem; position:relative;}
+.block.tp-step{border-left:6px solid var(--blue);}
+.block.tp-photo{border-left:6px solid var(--sub);}
+.block.tp-video{border-left:6px solid var(--purple);}
+.block.tp-caution{border-left:6px solid var(--yellow); background:#FFFBEE;}
+.block.tp-danger{border-left:6px solid var(--red); background:#FDECEA;}
+.block.tp-checklist{border-left:6px solid var(--green);}
+.block-head{display:flex; align-items:center; gap:.5rem; margin-bottom:.5rem; font-weight:700; color:var(--navy); font-size:.95rem;}
+.block-head .tag{font-size:1.2rem;}
+.block-tools{display:flex; gap:.4rem; margin-top:.6rem;}
+.block-tools button{
+  min-height:40px; border-radius:8px; border:2px solid var(--line); background:#fff;
+  font-size:.85rem; font-weight:700; cursor:pointer; padding:.2rem .6rem; color:var(--sub);
+}
+.block-tools button.danger{color:var(--red); border-color:var(--red);}
+.block img, .block video{width:100%; border-radius:12px; margin-bottom:.4rem; background:#000;}
+.addbar{display:grid; grid-template-columns:1fr 1fr; gap:.55rem; margin-top:1rem;}
+.addbar button{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.2rem;
+  min-height:72px; border-radius:14px; border:2px dashed var(--line); background:#fff;
+  font-size:.95rem; font-weight:700; color:var(--ink); cursor:pointer;
+}
+.addbar button .ic{font-size:1.5rem;}
+.addbar button.b-step{border-color:var(--blue); color:var(--blue);}
+.addbar button.b-photo{border-color:var(--sub); color:var(--sub);}
+.addbar button.b-video{border-color:var(--purple); color:var(--purple);}
+.addbar button.b-caution{border-color:var(--yellow); color:#8a6400;}
+.addbar button.b-danger{border-color:var(--red); color:var(--red);}
+.addbar button.b-checklist{border-color:var(--green); color:var(--green);}
+.warnbox{background:#FFF7E0; border:2px solid var(--yellow); border-radius:12px; padding:.7rem .9rem; margin:.4rem 0;}
+.dangerbox{background:#FDECEA; border:2px solid var(--red); border-radius:12px; padding:.7rem .9rem; margin:.4rem 0;}
+.checkbox-row{display:flex; gap:.6rem; align-items:flex-start; background:#fff; border:1px solid var(--line); border-radius:12px; padding:.8rem; margin-bottom:.6rem;}
+.checkbox-row input{width:26px; height:26px; margin-top:.15rem; flex-shrink:0;}
+/* ---- ステップモード ---- */
+#scr-step main{padding-bottom:120px;}
+.progress{display:flex; gap:4px; margin:.4rem 0 .8rem;}
+.progress span{flex:1; height:10px; border-radius:5px; background:#D8DEE5;}
+.progress span.done{background:var(--blue);}
+.stepview img, .stepview video{width:100%; border-radius:14px; background:#000;}
+.stepview .head{font-size:1.35rem; font-weight:700; margin:.6rem 0 .3rem;}
+.stepnav{
+  position:fixed; bottom:0; left:0; right:0; background:#fff;
+  border-top:2px solid var(--line); padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));
+  display:flex; gap:.7rem; z-index:30;
+}
+.stepnav .btn{min-height:64px; font-size:1.25rem;}
+/* ---- 差分 ---- */
+.diff-add{background:#DDF3E4; border-left:5px solid var(--green); padding:.5rem .7rem; border-radius:8px; margin:.3rem 0;}
+.diff-del{background:#FADBD8; border-left:5px solid var(--red); padding:.5rem .7rem; border-radius:8px; margin:.3rem 0; text-decoration:line-through; color:#7A2A25;}
+.diff-same{padding:.5rem .7rem; color:var(--sub); margin:.3rem 0;}
+/* ---- サイン ---- */
+#signCanvas{width:100%; height:200px; background:#fff; border:2px solid var(--line); border-radius:12px; touch-action:none;}
+.grade-row{display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem; margin-top:.4rem;}
+.grade-row button{min-height:64px; border-radius:12px; border:2px solid var(--line); background:#fff; font-size:1rem; font-weight:700; cursor:pointer; padding:.3rem;}
+.grade-row button.sel-A{background:var(--green); color:#fff; border-color:var(--green);}
+.grade-row button.sel-B{background:var(--blue); color:#fff; border-color:var(--blue);}
+.grade-row button.sel-C{background:var(--red); color:#fff; border-color:var(--red);}
+.rec-item{background:#fff; border:1px solid var(--line); border-radius:14px; padding:.8rem 1rem; margin-bottom:.6rem;}
+.rec-item .g{font-weight:700; border-radius:8px; padding:.05rem .5rem; color:#fff; display:inline-block; font-size:.9rem;}
+.g.gA{background:var(--green);} .g.gB{background:var(--blue);} .g.gC{background:var(--red);}
+.rec-item img{height:44px; border:1px solid var(--line); border-radius:8px; background:#fff;}
+/* ---- 設定 ---- */
+.size-row{display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem;}
+.size-row button{min-height:56px; border-radius:12px; border:2px solid var(--line); background:#fff; font-weight:700; cursor:pointer;}
+.size-row button.on{background:var(--navy); color:#fff; border-color:var(--navy);}
+footer.note{color:var(--sub); font-size:.85rem; text-align:center; padding:1rem;}
+@media(min-width:600px){ .home-grid{grid-template-columns:1fr 1fr;} .addbar{grid-template-columns:repeat(3,1fr);} }
+</style>
+</head>
+<body>
+<header>
+  <button class="back" id="btnBack" style="display:none">← 戻る</button>
+  <h1 id="hTitle">マナブ</h1>
+</header>
+<div class="hazard"></div>
+<main id="mainArea"></main>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+
+/* ============ 保存(IndexedDB。サーバーもAIも使わず、端末のブラウザ内にのみ保存) ============ */
+const DB_NAME = "manabuDB", STORE = "kv";
+function idbOpen(){
+  return new Promise((resolve, reject)=>{
+    if(!window.indexedDB){ reject(new Error("このブラウザはIndexedDBに対応していません")); return; }
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = ()=>{ req.result.createObjectStore(STORE); };
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
+  });
+}
+async function sGet(key){
+  try{
+    const db = await idbOpen();
+    return await new Promise(res=>{
+      const rq = db.transaction(STORE,"readonly").objectStore(STORE).get(key);
+      rq.onsuccess = ()=>res(rq.result===undefined ? null : rq.result);
+      rq.onerror = ()=>res(null);
+    });
+  }catch(e){ return null; }
+}
+async function sSet(key, val){
+  const db = await idbOpen();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(STORE,"readwrite");
+    tx.objectStore(STORE).put(val, key);
+    tx.oncomplete = ()=>resolve(true);
+    tx.onerror = ()=>reject(tx.error);
+  });
+}
+
+/* ============ 状態 ============ */
+const S = {
+  idx: { manuals: [], records: [], seq: 1 },
+  stack: [],
+  cur: "home",
+  editing: null,       // { manualId|null, meta:{title,client,dept,cat}, content:{overview,purpose,blocks:[]}, reason }
+  currentManual: null,
+  stepPages: [],
+  stepIndex: 0,
+  grade: null,
+  signDirty: false
+};
+const TITLES = {
+  home:"マナブ", list:"手順書をさがす", view:"手順書", step:"ステップ表示",
+  builder:"手順書ビルダー", history:"版歴(改訂履歴)", diff:"版の比較",
+  eduTop:"教育記録", eduPick:"手順書を選ぶ", eduNew:"教育記録の作成", settings:"設定・データ"
+};
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2600);
+}
+function uid(){ return "b" + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+/* ============ ルーティング ============ */
+const R = {}; /* screen名 -> レンダリング関数 */
+function nav(screen){ S.stack.push(S.cur); render(screen); }
+function back(){ const prev = S.stack.pop() || "home"; render(prev); }
+function render(screen){
+  S.cur = screen;
+  document.getElementById("mainArea").innerHTML = R[screen] ? R[screen]() : "";
+  document.getElementById("hTitle").textContent = TITLES[screen] || "マナブ";
+  document.getElementById("btnBack").style.display = screen==="home" ? "none" : "block";
+  afterRender(screen);
+  window.scrollTo(0,0);
+}
+document.getElementById("btnBack").addEventListener("click", back);
+function afterRender(screen){
+  if(screen==="list") fillListFilters();
+  if(screen==="eduNew") setTimeout(initSign, 30);
+  if(screen==="settings") { /* 何もしない */ }
+}
+
+/* ============ ホーム ============ */
+R.home = ()=>`
+  <div class="home-grid">
+    <button class="home-btn" onclick="nav('list')">
+      <span class="ic" style="background:var(--blue)">📖</span>
+      <span>手順書を見る<span class="sub">検索・ステップ表示</span></span>
+    </button>
+    <button class="home-btn" onclick="nav('eduTop')">
+      <span class="ic" style="background:var(--green)">🎓</span>
+      <span>教育記録<span class="sub">記録の作成・確認</span></span>
+    </button>
+    <button class="home-btn" onclick="startNewManual()">
+      <span class="ic" style="background:var(--orange)">🧩</span>
+      <span>手順書を作る<span class="sub">ボタンを押して組み立てる</span></span>
+    </button>
+    <button class="home-btn" onclick="nav('settings')">
+      <span class="ic" style="background:#5A6673">⚙️</span>
+      <span>設定・データ<span class="sub">文字サイズ・バックアップ</span></span>
+    </button>
+  </div>
+  <footer class="note">無料版(AIなし)v1.0<br>データはこの端末のブラウザ内にのみ保存されます。<br>他の端末と共有する場合は「設定」からバックアップを書き出し、相手の端末で読み込んでください。</footer>
+`;
+
+/* ============ 一覧・検索 ============ */
+R.list = ()=>`
+  <div class="searchbar"><input type="text" id="q" placeholder="作業名で検索" oninput="renderListBox()"></div>
+  <div class="filters">
+    <select id="fClient" onchange="renderListBox()"></select>
+    <select id="fCat" onchange="renderListBox()"></select>
+  </div>
+  <div id="listBox"></div>
+`;
+function fillListFilters(){
+  const clients = [...new Set(S.idx.manuals.map(m=>m.client))];
+  const cats = [...new Set(S.idx.manuals.map(m=>m.cat))];
+  document.getElementById("fClient").innerHTML = `<option value="">荷主:すべて</option>` + clients.map(c=>`<option>${esc(c)}</option>`).join("");
+  document.getElementById("fCat").innerHTML = `<option value="">区分:すべて</option>` + cats.map(c=>`<option>${esc(c)}</option>`).join("");
+  renderListBox();
+}
+function renderListBox(){
+  const q = (document.getElementById("q")?.value || "").trim();
+  const fc = document.getElementById("fClient")?.value || "";
+  const fk = document.getElementById("fCat")?.value || "";
+  const items = S.idx.manuals.filter(m=>
+    (!q || m.title.includes(q)) && (!fc || m.client===fc) && (!fk || m.cat===fk));
+  const box = document.getElementById("listBox");
+  if(!items.length){ box.innerHTML = `<div class="empty">手順書がまだありません。<br>「手順書を作る」から作成できます。</div>`; return; }
+  box.innerHTML = items.map(m=>`
+    <div class="m-item" onclick="openManual('${m.id}')">
+      <span class="badge ${m.status==="active"?"b-active":"b-draft"}">${m.status==="active"?"発効中 第"+m.ver+"版":"下書き"}</span>
+      <span class="badge b-cat">${esc(m.cat)}</span>
+      <div class="t">${esc(m.title)}</div>
+      <div class="meta">${esc(m.client)} / ${esc(m.dept)} / 更新:${m.updatedAt}</div>
+    </div>`).join("");
+}
+
+/* ============ 手順書ビルダー(作成・改訂) ============ */
+const BLOCK_DEFS = {
+  step:     { tag:"📋", label:"STEP", cls:"tp-step" },
+  photo:    { tag:"📷", label:"写真", cls:"tp-photo" },
+  video:    { tag:"🎥", label:"動画", cls:"tp-video" },
+  caution:  { tag:"⚠️", label:"注意マーク", cls:"tp-caution" },
+  danger:   { tag:"🚨", label:"危険マーク", cls:"tp-danger" },
+  checklist:{ tag:"✅", label:"確認項目", cls:"tp-checklist" }
+};
+function startNewManual(){
+  S.editing = { manualId:null, meta:{title:"",client:"",dept:"DC1",cat:"入荷"},
+    content:{overview:"", purpose:"", blocks:[]}, reason:"新規制定" };
+  nav("builder");
+}
+function startRevision(){
+  const d = S.currentManual;
+  S.editing = { manualId:d.id, meta:{...d.meta},
+    content: JSON.parse(JSON.stringify(activeContent(d))), reason:"" };
+  nav("builder");
+}
+R.builder = ()=>{
+  const e = S.editing;
+  const isNew = !e.manualId;
+  const clientsList = [...new Set(S.idx.manuals.map(m=>m.client))].filter(c=>c && c!=="未設定");
+  return `
+  <div class="card">
+    ${isNew ? "作業名・作業概要を入れたら、下のボタンでSTEPや写真を追加していってください。全て手入力です(AIは使いません)。"
+             : `<strong>改訂理由</strong><span style="color:var(--red)">必須</span><br>
+                <input type="text" id="edReason" value="${esc(e.reason==="新規制定"?"":e.reason)}" placeholder="例:誤出荷対策としてSTEP5に確認を追加" oninput="S.editing.reason=this.value">`}
+  </div>
+  <label class="f">作業名(タイトル)<span class="req">必須</span></label>
+  <input type="text" id="mTitle" value="${esc(e.meta.title)}" oninput="S.editing.meta.title=this.value">
+  <label class="f">作業概要<span class="opt">任意</span></label>
+  <textarea id="mOverview" oninput="S.editing.content.overview=this.value">${esc(e.content.overview)}</textarea>
+  <label class="f">作業目的<span class="opt">任意</span></label>
+  <textarea id="mPurpose" oninput="S.editing.content.purpose=this.value">${esc(e.content.purpose)}</textarea>
+  <label class="f">荷主<span class="opt">任意</span></label>
+  <input type="text" id="mClient" list="clientList" value="${esc(e.meta.client)}" oninput="S.editing.meta.client=this.value">
+  <datalist id="clientList">${clientsList.map(c=>`<option value="${esc(c)}">`).join("")}</datalist>
+  <label class="f">部署</label>
+  <select id="mDept" onchange="S.editing.meta.dept=this.value">
+    ${["DC1","DC2","DC3","その他"].map(x=>`<option ${e.meta.dept===x?"selected":""}>${x}</option>`).join("")}
+  </select>
+  <label class="f">作業区分</label>
+  <select id="mCat" onchange="S.editing.meta.cat=this.value">
+    ${["入荷","格納","ピッキング","検品","梱包","出荷","フォークリフト","横持ち","その他"].map(x=>`<option ${e.meta.cat===x?"selected":""}>${x}</option>`).join("")}
+  </select>
+
+  <div class="sec-title">手順の中身(ボタンで追加)</div>
+  <div id="blockList">${renderBlockList()}</div>
+
+  <div class="addbar">
+    <button class="b-step" onclick="addBlock('step')"><span class="ic">📋</span>STEP追加</button>
+    <button class="b-photo" onclick="pickFile('photo')"><span class="ic">📷</span>写真追加</button>
+    <button class="b-video" onclick="pickFile('video')"><span class="ic">🎥</span>動画追加</button>
+    <button class="b-caution" onclick="addBlock('caution')"><span class="ic">⚠️</span>注意マーク追加</button>
+    <button class="b-danger" onclick="addBlock('danger')"><span class="ic">🚨</span>危険マーク追加</button>
+    <button class="b-checklist" onclick="addBlock('checklist')"><span class="ic">✅</span>確認項目追加</button>
+  </div>
+  <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileChosen(event)">
+
+  <div style="height:1.4rem"></div>
+  <button class="btn green" onclick="saveManual(false)">💾 下書きとして保存</button>
+  <div style="height:.6rem"></div>
+  <button class="btn" onclick="saveManual(true)">✅ 確認済みとして発効する</button>
+  `;
+};
+function renderBlockList(){
+  const blocks = S.editing.content.blocks;
+  if(!blocks.length) return `<div class="empty">まだ何も追加されていません。下のボタンで追加してください。</div>`;
+  let stepNo = 0;
+  return blocks.map((b,i)=>{
+    const def = BLOCK_DEFS[b.type];
+    let body = "";
+    if(b.type==="step"){
+      stepNo++;
+      body = `<div class="block-head"><span class="tag">${def.tag}</span>STEP ${stepNo}</div>
+        <input type="text" placeholder="見出し(例:パレットに積み付ける)" value="${esc(b.title)}" oninput="updField('${b.id}','title',this.value)">
+        <div style="height:.4rem"></div>
+        <textarea placeholder="具体的な動作を書いてください" oninput="updField('${b.id}','body',this.value)">${esc(b.body)}</textarea>`;
+    }else if(b.type==="photo"){
+      body = `<div class="block-head"><span class="tag">${def.tag}</span>写真</div>
+        ${b.data?`<img src="${b.data}" alt="写真">`:""}
+        <input type="text" placeholder="写真の説明(任意)" value="${esc(b.caption||"")}" oninput="updField('${b.id}','caption',this.value)">`;
+    }else if(b.type==="video"){
+      body = `<div class="block-head"><span class="tag">${def.tag}</span>動画</div>
+        ${b.data?`<video src="${b.data}" controls></video>`:""}
+        <input type="text" placeholder="動画の説明(任意)" value="${esc(b.caption||"")}" oninput="updField('${b.id}','caption',this.value)">`;
+    }else if(b.type==="caution" || b.type==="danger"){
+      body = `<div class="block-head"><span class="tag">${def.tag}</span>${def.label}</div>
+        <textarea placeholder="${b.type==="caution"?"注意する内容を書いてください":"危険な内容を書いてください"}" oninput="updField('${b.id}','text',this.value)">${esc(b.text||"")}</textarea>`;
+    }else if(b.type==="checklist"){
+      body = `<div class="block-head"><span class="tag">${def.tag}</span>確認項目</div>
+        <input type="text" placeholder="確認する内容(例:数量が合っているか)" value="${esc(b.text||"")}" oninput="updField('${b.id}','text',this.value)">`;
+    }
+    return `<div class="block ${def.cls}">
+      ${body}
+      <div class="block-tools">
+        <button onclick="moveBlock(${i},-1)" ${i===0?"disabled":""}>↑ 上へ</button>
+        <button onclick="moveBlock(${i},1)" ${i===blocks.length-1?"disabled":""}>↓ 下へ</button>
+        <button class="danger" onclick="delBlock('${b.id}')">削除</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+function updField(id, field, val){
+  const b = S.editing.content.blocks.find(x=>x.id===id);
+  if(b) b[field] = val;
+}
+function addBlock(type){
+  S.editing.content.blocks.push({ id:uid(), type, title:"", body:"", text:"", caption:"", data:null });
+  document.getElementById("blockList").innerHTML = renderBlockList();
+  const els = document.querySelectorAll("#blockList .block");
+  if(els.length) els[els.length-1].scrollIntoView({behavior:"smooth", block:"center"});
+}
+function moveBlock(i, dir){
+  const arr = S.editing.content.blocks;
+  const j = i + dir;
+  if(j<0 || j>=arr.length) return;
+  [arr[i], arr[j]] = [arr[j], arr[i]];
+  document.getElementById("blockList").innerHTML = renderBlockList();
+}
+function delBlock(id){
+  S.editing.content.blocks = S.editing.content.blocks.filter(b=>b.id!==id);
+  document.getElementById("blockList").innerHTML = renderBlockList();
+}
+let pendingFileType = null;
+function pickFile(type){
+  pendingFileType = type;
+  const inp = document.getElementById("fileInput");
+  inp.accept = type==="photo" ? "image/*" : "video/*";
+  inp.click();
+}
+function compressImage(file, maxSide, quality){
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = ()=>{
+      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width*scale); c.height = Math.round(img.height*scale);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL("image/jpeg", quality));
+    };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error("画像の読み込みに失敗しました")); };
+    img.src = url;
+  });
+}
+function readAsDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const r = new FileReader();
+    r.onload = ()=>resolve(r.result);
+    r.onerror = ()=>reject(new Error("ファイルの読み込みに失敗しました"));
+    r.readAsDataURL(file);
+  });
+}
+async function onFileChosen(ev){
+  const file = ev.target.files[0];
+  ev.target.value = "";
+  if(!file) return;
+  try{
+    if(pendingFileType==="photo"){
+      const data = await compressImage(file, 900, 0.65);
+      S.editing.content.blocks.push({ id:uid(), type:"photo", data, caption:"" });
+    }else{
+      if(file.size > 15*1024*1024){
+        toast("動画のファイルサイズが大きいため、保存に失敗する可能性があります(15MB超)");
+      }
+      const data = await readAsDataURL(file);
+      S.editing.content.blocks.push({ id:uid(), type:"video", data, caption:"" });
+    }
+    document.getElementById("blockList").innerHTML = renderBlockList();
+  }catch(e){ toast(e.message || "追加に失敗しました"); }
+}
+
+/* ============ 保存 ============ */
+async function saveManual(publish){
+  const e = S.editing;
+  if(!e.meta.title.trim()){ toast("作業名を入力してください"); return; }
+  if(!e.content.blocks.length){ toast("STEPなどを1つ以上追加してください"); return; }
+  if(!e.manualId && !e.reason) e.reason = "新規制定";
+  if(e.manualId && !document.getElementById("edReason").value.trim()){ toast("改訂理由を入力してください"); return; }
+  const now = new Date().toISOString().slice(0,10);
+  try{
+    if(!e.manualId){
+      const id = "M" + String(S.idx.seq).padStart(4,"0");
+      S.idx.seq++;
+      const doc = { id, meta:e.meta, status: publish?"active":"draft", currentVersion:"1.0",
+        versions:[{ ver:"1.0", date:now, reason:"新規制定", effective:publish, content:e.content }],
+        createdAt:now, updatedAt:now };
+      await sSet("m:"+id, doc);
+      S.idx.manuals.unshift({ id, title:e.meta.title, client:e.meta.client||"未設定", dept:e.meta.dept, cat:e.meta.cat, ver:"1.0", status:doc.status, updatedAt:now });
+      await sSet("idx", S.idx);
+      toast(publish ? "第1.0版として発効しました" : "下書きを保存しました");
+    }else{
+      const doc = await sGet("m:"+e.manualId);
+      if(!doc){ toast("元の手順書が見つかりません"); return; }
+      const major = Math.floor(parseFloat(doc.currentVersion)) + 1;
+      doc.meta = e.meta;
+      doc.versions.push({ ver: publish ? major+".0" : "draft", date:now, reason:e.reason, effective:publish, content:e.content });
+      if(publish){ doc.currentVersion = major+".0"; doc.status = "active"; }
+      doc.updatedAt = now;
+      await sSet("m:"+doc.id, doc);
+      const m = S.idx.manuals.find(x=>x.id===doc.id);
+      if(m){ m.title=e.meta.title; m.client=e.meta.client||"未設定"; m.dept=e.meta.dept; m.cat=e.meta.cat; m.ver=doc.currentVersion; m.updatedAt=now; m.status=doc.status; }
+      await sSet("idx", S.idx);
+      toast(publish ? `第${doc.currentVersion}版として発効しました` : "改訂の下書きを保存しました");
+    }
+    S.editing = null; S.stack = [];
+    render("list");
+  }catch(err){
+    toast("保存に失敗しました。写真や動画が多い場合、端末の保存容量を確認してください。");
+  }
+}
+
+/* ============ 手順書 閲覧 ============ */
+async function openManual(id){
+  const doc = await sGet("m:"+id);
+  if(!doc){ toast("読み込みに失敗しました"); return; }
+  S.currentManual = doc;
+  nav("view");
+}
+function activeContent(doc){
+  for(let i=doc.versions.length-1;i>=0;i--) if(doc.versions[i].effective) return doc.versions[i].content;
+  return doc.versions[doc.versions.length-1].content;
+}
+R.view = ()=>{
+  const d = S.currentManual, c = activeContent(d), v = d.versions.filter(x=>x.effective).slice(-1)[0];
+  let stepNo = 0;
+  const blocksHtml = c.blocks.map(b=>{
+    if(b.type==="step"){
+      stepNo++;
+      return `<div class="block tp-step">
+        <div class="block-head">STEP ${stepNo}</div>
+        ${b.title?`<div style="font-weight:700; font-size:1.1rem">${esc(b.title)}</div>`:""}
+        <div>${esc(b.body)}</div></div>`;
+    }
+    if(b.type==="photo") return `<div class="block tp-photo"><img src="${b.data}" alt="写真">${b.caption?`<div class="hint">${esc(b.caption)}</div>`:""}</div>`;
+    if(b.type==="video") return `<div class="block tp-video"><video src="${b.data}" controls></video>${b.caption?`<div class="hint">${esc(b.caption)}</div>`:""}</div>`;
+    if(b.type==="caution") return `<div class="warnbox">⚠ ${esc(b.text)}</div>`;
+    if(b.type==="danger") return `<div class="dangerbox">🚨 ${esc(b.text)}</div>`;
+    if(b.type==="checklist") return `<label class="checkbox-row"><input type="checkbox"><span>${esc(b.text)}</span></label>`;
+    return "";
+  }).join("");
+  return `
+    <div class="card">
+      <span class="badge ${d.status==="active"?"b-active":"b-draft"}">${d.status==="active"?"発効中 第"+d.currentVersion+"版":"下書き"}</span>
+      <span class="badge b-cat">${esc(d.meta.cat)}</span>
+      <h2 style="margin:.4rem 0 .2rem; font-size:1.3rem">${esc(d.meta.title)}</h2>
+      <div class="meta" style="color:var(--sub); font-size:.9rem">${esc(d.meta.client||"未設定")} / ${esc(d.meta.dept)}${v?` / 発効日:${v.date}`:""}</div>
+      <div style="display:flex; gap:.5rem; margin-top:.8rem; flex-wrap:wrap">
+        <button class="btn small" onclick="startStepMode()">▶ ステップ表示</button>
+        <button class="btn small green" onclick="eduFromView()">🎓 この手順書で教育</button>
+        <button class="btn small orange" onclick="startRevision()">✏ 改訂する</button>
+        <button class="btn small gray" onclick="nav('history')">🕘 版歴</button>
+      </div>
+    </div>
+    ${c.overview ? `<div class="sec-title">作業概要</div><div class="card">${esc(c.overview)}</div>` : ""}
+    ${c.purpose ? `<div class="sec-title">作業目的</div><div class="card">${esc(c.purpose)}</div>` : ""}
+    <div class="sec-title">手順の中身</div>
+    ${blocksHtml || `<div class="empty">中身がまだありません</div>`}
+  `;
+};
+
+/* ============ ステップモード ============ */
+function startStepMode(){
+  const c = activeContent(S.currentManual);
+  S.stepPages = c.blocks.slice();
+  S.stepIndex = 0;
+  nav("step");
+}
+R.step = ()=>{
+  const pages = S.stepPages;
+  const total = pages.length;
+  const progress = Array.from({length:total},(_,i)=>`<span class="${i<=S.stepIndex?"done":""}"></span>`).join("");
+  const b = pages[S.stepIndex];
+  let stepNo = 0;
+  for(let i=0;i<=S.stepIndex;i++) if(pages[i].type==="step") stepNo++;
+  let body = "";
+  if(!b){
+    body = `<div class="head">✅ 完了</div><p>最後まで確認しました。</p>`;
+  }else if(b.type==="step"){
+    body = `<div style="font-weight:700; color:var(--sub)">STEP ${stepNo}</div>
+      <div class="head">${esc(b.title)}</div><div style="font-size:1.15rem">${esc(b.body)}</div>`;
+  }else if(b.type==="photo"){
+    body = `<img src="${b.data}" alt="写真">${b.caption?`<div class="head" style="font-size:1.1rem">${esc(b.caption)}</div>`:""}`;
+  }else if(b.type==="video"){
+    body = `<video src="${b.data}" controls autoplay muted></video>${b.caption?`<div class="head" style="font-size:1.1rem">${esc(b.caption)}</div>`:""}`;
+  }else if(b.type==="caution"){
+    body = `<div class="warnbox" style="font-size:1.2rem">⚠ 注意<br><br>${esc(b.text)}</div>`;
+  }else if(b.type==="danger"){
+    body = `<div class="dangerbox" style="font-size:1.2rem">🚨 危険<br><br>${esc(b.text)}</div>`;
+  }else if(b.type==="checklist"){
+    body = `<div class="head">✅ 確認してください</div>
+      <label class="checkbox-row" style="font-size:1.2rem"><input type="checkbox"><span>${esc(b.text)}</span></label>`;
+  }
+  return `<div class="progress">${progress}</div>
+    <div class="stepview">${body}</div>
+    <div class="stepnav">
+      <button class="btn gray" id="btnPrev" onclick="stepMove(-1)" ${S.stepIndex===0?"disabled":""}>← 前へ</button>
+      <button class="btn" onclick="stepMove(1)">${S.stepIndex>=total-1 ? "終了" : "次へ →"}</button>
+    </div>`;
+};
+function stepMove(d){
+  if(d>0 && S.stepIndex>=S.stepPages.length-1){ back(); return; }
+  S.stepIndex = Math.max(0, Math.min(S.stepPages.length-1, S.stepIndex+d));
+  render("step");
+}
+let tx0 = null;
+document.getElementById("mainArea").addEventListener("touchstart", e=>{ if(S.cur==="step") tx0 = e.touches[0].clientX; }, {passive:true});
+document.getElementById("mainArea").addEventListener("touchend", e=>{
+  if(tx0===null || S.cur!=="step") return;
+  const dx = e.changedTouches[0].clientX - tx0; tx0 = null;
+  if(Math.abs(dx) > 60) stepMove(dx<0 ? 1 : -1);
+}, {passive:true});
+
+/* ============ 版歴・差分 ============ */
+R.history = ()=>{
+  const d = S.currentManual;
+  const vers = d.versions.filter(v=>v.effective);
+  if(!vers.length) return `<div class="empty">発効済みの版がまだありません。</div>`;
+  return vers.slice().reverse().map((v,ri)=>{
+    const i = vers.length-1-ri;
+    return `<div class="card">
+      <span class="badge ${i===vers.length-1?"b-active":"b-old"}">第${v.ver}版${i===vers.length-1?"(現行)":"(旧版)"}</span>
+      <div style="margin:.3rem 0"><strong>改訂日:</strong>${v.date}<br><strong>改訂理由:</strong>${esc(v.reason)}</div>
+      ${i>0?`<button class="btn small gray" onclick="openDiff(${i-1},${i})">前版(第${vers[i-1].ver}版)と比較</button>`:""}
+    </div>`;
+  }).join("");
+};
+let diffPair = [0,0];
+function openDiff(oldI,newI){ diffPair=[oldI,newI]; nav("diff"); }
+R.diff = ()=>{
+  const vers = S.currentManual.versions.filter(v=>v.effective);
+  const [oldI,newI] = diffPair;
+  const A = vers[oldI].content, B = vers[newI].content;
+  let h = `<div class="card"><strong>第${vers[oldI].ver}版 → 第${vers[newI].ver}版</strong><br>改訂理由:${esc(vers[newI].reason)}</div>`;
+  h += `<div style="margin-bottom:.6rem"><span class="badge" style="background:var(--green)">追加</span>
+    <span class="badge" style="background:var(--yellow); color:#000">変更</span>
+    <span class="badge" style="background:var(--red)">削除</span></div>`;
+  const scalar = (label,a,b)=>{
+    if((a||"")===(b||"")) return `<div class="sec-title">${label}</div><div class="diff-same">変更なし</div>`;
+    return `<div class="sec-title">${label}</div>${a?`<div class="diff-del">${esc(a)}</div>`:""}<div class="diff-add">${esc(b)}</div>`;
+  };
+  h += scalar("作業概要", A.overview, B.overview);
+  h += scalar("作業目的", A.purpose, B.purpose);
+  h += `<div class="sec-title">手順の中身</div>`;
+  const n = Math.max(A.blocks.length, B.blocks.length);
+  const rep = b => !b ? "" : (b.type==="step" ? `[STEP] ${b.title} ${b.body}` :
+    b.type==="photo"||b.type==="video" ? `[${BLOCK_DEFS[b.type].label}] ${b.caption||""}` :
+    `[${BLOCK_DEFS[b.type].label}] ${b.text||""}`);
+  let any = false, blockH = "";
+  for(let i=0;i<n;i++){
+    const a = A.blocks[i], b = B.blocks[i];
+    const ra = rep(a), rb = rep(b);
+    if(ra===rb) continue;
+    any = true;
+    if(a && !b) blockH += `<div class="diff-del">${esc(ra)}</div>`;
+    else if(!a && b) blockH += `<div class="diff-add">${esc(rb)}</div>`;
+    else blockH += `<div class="diff-del">${esc(ra)}</div><div class="diff-add">${esc(rb)}</div>`;
+  }
+  h += any ? blockH : `<div class="diff-same">変更なし</div>`;
+  return h;
+};
+
+/* ============ 教育記録 ============ */
+R.eduTop = ()=>{
+  return `<button class="btn green" onclick="nav('eduPick')">➕ 教育記録をつくる</button>
+    <div class="sec-title">これまでの教育記録</div>
+    <div id="eduListBox">${renderEduList()}</div>`;
+};
+function renderEduList(){
+  if(!S.idx.records.length) return `<div class="empty">教育記録がまだありません。</div>`;
+  return S.idx.records.map(r=>`
+    <div class="rec-item" onclick="toggleRec('${r.id}', this)">
+      <span class="g g${r.grade}">${r.grade}</span> <strong>${esc(r.trainee)}</strong>
+      <div style="color:var(--sub); font-size:.92rem">${esc(r.manualTitle)}(第${r.ver}版)<br>${r.date} / 担当:${esc(r.trainer)}</div>
+      <div class="recSign"></div>
+    </div>`).join("");
+}
+async function toggleRec(id, el){
+  const box = el.querySelector(".recSign");
+  if(box.innerHTML){ box.innerHTML=""; return; }
+  const rec = await sGet("r:"+id);
+  box.innerHTML = rec && rec.sign
+    ? `<div style="margin-top:.4rem; font-size:.85rem; color:var(--sub)">受講者サイン:</div><img src="${rec.sign}" alt="サイン">`
+    : `<p class="hint">サインを読み込めませんでした</p>`;
+}
+R.eduPick = ()=>{
+  const items = S.idx.manuals.filter(m=>m.status==="active");
+  if(!items.length) return `<div class="empty">発効中の手順書がありません。</div>`;
+  return items.map(m=>`
+    <div class="m-item" onclick="eduStart('${m.id}')">
+      <span class="badge b-active">第${m.ver}版</span>
+      <div class="t">${esc(m.title)}</div>
+      <div class="meta">${esc(m.client)} / ${esc(m.dept)}</div>
+    </div>`).join("");
+};
+async function eduStart(id){
+  const doc = await sGet("m:"+id);
+  if(!doc){ toast("読み込みに失敗しました"); return; }
+  S.currentManual = doc;
+  S.grade = null; S.signDirty = false;
+  nav("eduNew");
+}
+function eduFromView(){ S.grade=null; S.signDirty=false; nav("eduNew"); }
+R.eduNew = ()=>{
+  const d = S.currentManual;
+  return `
+  <div class="card"><strong>${esc(d.meta.title)}</strong><br>第${d.currentVersion}版で教育を実施します</div>
+  <label class="f">受講者の名前<span class="req">必須</span></label>
+  <input type="text" id="eTrainee" placeholder="例:山田 太郎">
+  <label class="f">教育担当者<span class="req">必須</span></label>
+  <input type="text" id="eTrainer" placeholder="例:加藤">
+  <label class="f">教育日</label>
+  <input type="date" id="eDate" value="${new Date().toISOString().slice(0,10)}">
+  <label class="f">理解度</label>
+  <div class="grade-row">
+    <button id="gA" onclick="setGrade('A')">A<br><small>単独作業できる</small></button>
+    <button id="gB" onclick="setGrade('B')">B<br><small>見守りがあればできる</small></button>
+    <button id="gC" onclick="setGrade('C')">C<br><small>再教育が必要</small></button>
+  </div>
+  <label class="f">受講者サイン(指で書いてください)</label>
+  <canvas id="signCanvas"></canvas>
+  <button class="btn gray small" style="margin-top:.4rem" onclick="clearSign()">サインを書き直す</button>
+  <div style="margin-top:1.2rem"><button class="btn green" onclick="saveEduRecord()">💾 教育記録を保存する</button></div>
+  `;
+};
+function setGrade(g){
+  S.grade = g;
+  ["A","B","C"].forEach(x=>{ const el=document.getElementById("g"+x); if(el) el.className = (x===g)?"sel-"+x:""; });
+}
+let sctx = null;
+function initSign(){
+  const c = document.getElementById("signCanvas");
+  if(!c) return;
+  const dpr = window.devicePixelRatio || 1;
+  c.width = c.clientWidth * dpr; c.height = 200 * dpr;
+  sctx = c.getContext("2d");
+  sctx.scale(dpr,dpr);
+  sctx.lineWidth = 3; sctx.lineCap = "round"; sctx.strokeStyle = "#101820";
+  S.signDirty = false;
+  let drawing = false;
+  const pos = e => { const r = c.getBoundingClientRect(); return { x: e.clientX-r.left, y: e.clientY-r.top }; };
+  c.onpointerdown = e=>{ drawing=true; const p=pos(e); sctx.beginPath(); sctx.moveTo(p.x,p.y); c.setPointerCapture(e.pointerId); };
+  c.onpointermove = e=>{ if(!drawing) return; const p=pos(e); sctx.lineTo(p.x,p.y); sctx.stroke(); S.signDirty=true; };
+  c.onpointerup = c.onpointercancel = ()=>{ drawing=false; };
+}
+function clearSign(){ const c=document.getElementById("signCanvas"); if(!c) return; sctx.clearRect(0,0,c.width,c.height); S.signDirty=false; }
+async function saveEduRecord(){
+  const trainee = document.getElementById("eTrainee").value.trim();
+  const trainer = document.getElementById("eTrainer").value.trim();
+  const date = document.getElementById("eDate").value;
+  if(!trainee || !trainer){ toast("受講者と教育担当者を入力してください"); return; }
+  if(!S.grade){ toast("理解度(A/B/C)を選んでください"); return; }
+  if(!S.signDirty){ toast("受講者のサインが必要です"); return; }
+  try{
+    const c = document.getElementById("signCanvas");
+    const small = document.createElement("canvas");
+    small.width=300; small.height=100;
+    small.getContext("2d").drawImage(c,0,0,300,100);
+    const sign = small.toDataURL("image/png");
+    const id = "R" + Date.now();
+    const rec = { id, manualId:S.currentManual.id, manualTitle:S.currentManual.meta.title,
+      ver:S.currentManual.currentVersion, trainee, trainer, date, grade:S.grade, sign, savedAt:new Date().toISOString() };
+    await sSet("r:"+id, rec);
+    S.idx.records.unshift({ id, manualTitle:rec.manualTitle, ver:rec.ver, trainee, trainer, date, grade:S.grade });
+    await sSet("idx", S.idx);
+    toast("教育記録を保存しました");
+    S.stack = []; render("eduTop");
+  }catch(e){ toast("保存に失敗しました"); }
+}
+
+/* ============ 設定・バックアップ ============ */
+R.settings = ()=>{
+  const cur = document.documentElement.className;
+  return `
+  <div class="card">
+    <h3>文字の大きさ</h3>
+    <div class="size-row">
+      <button id="szS" class="${cur===""?"on":""}" onclick="setScale('')">標準</button>
+      <button id="szL" class="${cur==="scale-l"?"on":""}" onclick="setScale('scale-l')">大</button>
+      <button id="szXL" class="${cur==="scale-xl"?"on":""}" onclick="setScale('scale-xl')">特大</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3>データのバックアップ</h3>
+    <p class="hint">データはこの端末のブラウザ内にのみ保存されています。他の端末に移す場合や、誤ってブラウザのデータを消してしまった場合に備えて、定期的に書き出しをおすすめします。</p>
+    <button class="btn gray" onclick="exportData()">⬇ 全データを書き出す(JSON)</button>
+    <div style="height:.6rem"></div>
+    <button class="btn gray" onclick="document.getElementById('importInput').click()">⬆ バックアップを読み込む</button>
+    <input type="file" id="importInput" accept="application/json" style="display:none" onchange="importData(event)">
+  </div>
+  <div class="card">
+    <h3>このアプリについて</h3>
+    <p style="margin:.2rem 0">マナブ 無料版(AIなし)v1.0<br>AI機能:なし(すべて手入力)<br>データ保存先:この端末のブラウザ内(IndexedDB)<br>公開方法:GitHub Pages(無料)</p>
+    <p class="hint">このアプリのプログラムコードはGitHub上で公開されますが、入力した手順書・教育記録のデータはGitHubには送信されません。</p>
+  </div>
+  `;
+};
+async function setScale(cls){
+  document.documentElement.className = cls;
+  render("settings");
+  try{ await sSet("settings", { scale: cls }); }catch(e){}
+}
+async function exportData(){
+  try{
+    const out = { exportedAt: new Date().toISOString(), idx: S.idx, manuals:{}, records:{} };
+    for(const m of S.idx.manuals) out.manuals[m.id] = await sGet("m:"+m.id);
+    for(const r of S.idx.records) out.records[r.id] = await sGet("r:"+r.id);
+    const blob = new Blob([JSON.stringify(out)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "manabu_backup_" + new Date().toISOString().slice(0,10) + ".json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast("バックアップを書き出しました");
+  }catch(e){ toast("書き出しに失敗しました"); }
+}
+async function importData(ev){
+  const file = ev.target.files[0];
+  ev.target.value = "";
+  if(!file) return;
+  if(!confirm("読み込むと、この端末の現在のデータに追加されます(上書きではありません)。よろしいですか?")) return;
+  try{
+    const text = await file.text();
+    const data = JSON.parse(text);
+    for(const id in (data.manuals||{})){ await sSet("m:"+id, data.manuals[id]); }
+    for(const id in (data.records||{})){ await sSet("r:"+id, data.records[id]); }
+    const existingM = new Set(S.idx.manuals.map(m=>m.id));
+    const existingR = new Set(S.idx.records.map(r=>r.id));
+    (data.idx?.manuals||[]).forEach(m=>{ if(!existingM.has(m.id)) S.idx.manuals.push(m); });
+    (data.idx?.records||[]).forEach(r=>{ if(!existingR.has(r.id)) S.idx.records.push(r); });
+    S.idx.seq = Math.max(S.idx.seq, (data.idx?.seq||1));
+    await sSet("idx", S.idx);
+    toast("読み込みが完了しました");
+    render("settings");
+  }catch(e){ toast("読み込みに失敗しました。ファイルを確認してください。"); }
+}
+
+/* ============ 初期化 ============ */
+(async function init(){
+  try{
+    const st = await sGet("settings");
+    if(st && st.scale) document.documentElement.className = st.scale;
+    const idx = await sGet("idx");
+    if(idx) S.idx = idx;
+  }catch(e){ /* 初回起動時はデータなしで正常 */ }
+  render("home");
+})();
+</script>
+
+</body>
+</html>
